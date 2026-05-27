@@ -55,6 +55,7 @@ Every template includes:
 ```text
 README.md
 PROJECT_SPEC.md
+AGENTS.md
 .env.example
 Makefile
 verify.sh

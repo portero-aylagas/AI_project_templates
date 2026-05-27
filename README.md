@@ -36,6 +36,8 @@ engineering quality and AI-system quality.
 - External model calls live behind `llm_client.py` or an equivalent adapter.
 - Normal tests use fake clients, fake tools, and deterministic fixtures.
 - `make verify` is the standard local verification command.
+- Each boilerplate includes project-local `AGENTS.md` guidance for future agent
+  maintenance after the project is copied.
 - FastAPI plus simple HTML is the default UI layer.
 - Docs explain architecture, setup, verification, known limitations, trust
   boundaries, and evaluation.

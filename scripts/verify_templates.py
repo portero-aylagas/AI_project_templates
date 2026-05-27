@@ -11,6 +11,7 @@ TEMPLATE_ROOT = ROOT / "templates"
 REQUIRED_ROOT_FILES = [
     "README.md",
     "PROJECT_SPEC.md",
+    "AGENTS.md",
     ".env.example",
     "Makefile",
     "verify.sh",
