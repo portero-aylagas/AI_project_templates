@@ -6,11 +6,6 @@ designed to make good engineering habits the default before a project grows:
 separated prompts, typed schemas, provider boundaries, fake-client tests,
 documented limitations, and repeatable verification.
 
-The template standards are based on the practices in
-`portero-aylagas/agent_skill_safe_project_improvement_system`: inspect first,
-characterize behavior, verify locally, audit engineering and AI risks, make one
-small patch, then verify again.
-
 ## Templates
 
 | Template | Use it for |
@@ -56,4 +51,3 @@ make verify
 Root verification checks that every template contains the required quality
 artifacts. Each template also has its own `make verify` command for local
 development after installing that template's dependencies.
-

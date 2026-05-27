@@ -55,7 +55,6 @@ Every template includes:
 ```text
 README.md
 PROJECT_SPEC.md
-AGENTS.md
 .env.example
 Makefile
 verify.sh
@@ -73,4 +72,3 @@ docs/runbook.md
 docs/limitations.md
 docs/evaluation.md
 ```
-
