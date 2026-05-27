@@ -1,0 +1,2 @@
+AI templates should use Pydantic schemas, fake clients, prompt files, and make verify.
+

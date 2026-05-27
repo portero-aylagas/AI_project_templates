@@ -1,0 +1,2 @@
+"""MCP agent template package."""
+
