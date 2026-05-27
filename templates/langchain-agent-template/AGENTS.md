@@ -21,8 +21,23 @@ config -> schemas -> prompts -> llm_client -> agent -> tools -> storage -> web -
 - Do not add live API keys, network-only checks, or paid services to normal
   verification or CI.
 
+## Shared Quality Rules
+
+- Keep code beginner/intermediate-friendly with clear names, simple control
+  flow, and explicit side effects at workflow, storage, provider, and web
+  boundaries.
+- Keep public modules, classes, and functions documented with concise
+  Google-style docstrings.
+- Raise useful error messages for missing configuration, malformed input,
+  provider failures, failed tools, and invalid structured output.
+- Do not log secrets, credentials, raw sensitive user data, or full provider or
+  tool payloads.
+
 ## LangChain Agent Rules
 
+- Use the `Agents And Tools`, `Prompt Quality`, `Structured Output`,
+  `LLM/API Integration`, and `Cost And Usage` categories when extending this
+  template.
 - Keep every tool contract typed, documented, and narrow.
 - Add or update fake tools before wiring equivalent live tools.
 - Test expected tool calls, tool inputs, tool outputs, and final structured

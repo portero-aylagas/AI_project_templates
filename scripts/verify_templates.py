@@ -64,10 +64,101 @@ REQUIRED_DEV_DEPENDENCIES = [
     "ruff",
 ]
 
+QUALITY_STANDARD_CONCEPTS = [
+    "General Software Architecture",
+    "Function Responsibility",
+    "Error Handling",
+    "Testability",
+    "Data And JSON Validation",
+    "Repository Hygiene",
+    "Documentation And Reviewer Evidence",
+    "Security And Secrets",
+    "AI Software Architecture",
+    "Prompt Quality",
+    "Dynamic Prompting",
+    "Structured Output",
+    "LLM/API Integration",
+    "RAG And Retrieval",
+    "Agents And Tools",
+    "Workflow Automation",
+    "Cost And Usage",
+]
+
+SHARED_AGENT_QUALITY_CONCEPTS = [
+    "beginner/intermediate-friendly",
+    "explicit side effects",
+    "Google-style docstrings",
+    "useful error messages",
+    "Do not log secrets",
+]
+
+TEMPLATE_AGENT_QUALITY_CONCEPTS = {
+    "human-in-the-loop-template": [
+        "Workflow Automation",
+        "AI Software Architecture",
+        "approve, edit, and reject",
+        "audit records",
+        "review decision is persisted",
+    ],
+    "langchain-agent-template": [
+        "Agents And Tools",
+        "typed, documented, and narrow",
+        "fake tools",
+        "tool calls",
+        "final-answer extraction",
+    ],
+    "langgraph-agent-template": [
+        "Workflow Automation",
+        "AI Software Architecture",
+        "graph state typed",
+        "node responsible",
+        "deterministic business rules",
+    ],
+    "mcp-agent-template": [
+        "Agents And Tools",
+        "Workflow Automation",
+        "untrusted external boundaries",
+        "allowlist",
+        "malformed tool responses",
+    ],
+    "rag-template": [
+        "RAG And Retrieval",
+        "fixture corpora",
+        "expected retrieved document IDs",
+        "citations",
+        "untrusted context",
+    ],
+    "simple-llm-call-template": [
+        "Prompt Quality",
+        "Dynamic Prompting",
+        "Structured Output",
+        "LLM/API Integration",
+        "typed response model",
+    ],
+}
+
 
 def read_text(path: Path) -> str:
     """Read a UTF-8 file for verification."""
     return path.read_text(encoding="utf-8")
+
+
+def verify_quality_standard() -> list[str]:
+    """Return problems for missing central quality taxonomy concepts."""
+    problems: list[str] = []
+    quality_standard = ROOT / "docs" / "template-quality-standard.md"
+
+    if not quality_standard.is_file():
+        return ["missing central quality standard: docs/template-quality-standard.md"]
+
+    text = read_text(quality_standard)
+    for concept in QUALITY_STANDARD_CONCEPTS:
+        if concept not in text:
+            problems.append(
+                f"docs/template-quality-standard.md missing quality concept: {concept}"
+            )
+
+    return problems
 
 
 def package_dir(template_dir: Path) -> Path:
@@ -115,6 +206,26 @@ def verify_docs(template_dir: Path) -> list[str]:
         meaningful_words = [word for word in text.split() if not word.startswith("#")]
         if len(meaningful_words) < 12:
             problems.append(f"documentation too thin: {relative_path}")
+
+    return problems
+
+
+def verify_agent_quality_guidance(template_dir: Path) -> list[str]:
+    """Return problems for missing shared or template-specific agent guidance."""
+    problems: list[str] = []
+    agents_file = template_dir / "AGENTS.md"
+
+    if not agents_file.is_file():
+        return problems
+
+    text = read_text(agents_file)
+    for concept in SHARED_AGENT_QUALITY_CONCEPTS:
+        if concept not in text:
+            problems.append(f"AGENTS.md missing shared quality concept: {concept}")
+
+    for concept in TEMPLATE_AGENT_QUALITY_CONCEPTS.get(template_dir.name, []):
+        if concept not in text:
+            problems.append(f"AGENTS.md missing template quality concept: {concept}")
 
     return problems
 
@@ -271,6 +382,7 @@ def verify_template(template_dir: Path) -> list[str]:
     required_text_files = REQUIRED_ROOT_FILES + REQUIRED_DOCS + [REQUIRED_CI_FILE]
     problems.extend(verify_non_empty_files(template_dir, required_text_files))
     problems.extend(verify_docs(template_dir))
+    problems.extend(verify_agent_quality_guidance(template_dir))
     problems.extend(verify_template_verification(template_dir))
     problems.extend(verify_ci_workflow(template_dir))
     problems.extend(verify_pyproject(template_dir))
@@ -305,7 +417,7 @@ def main() -> int:
         print("No templates found.")
         return 1
 
-    all_problems: list[str] = []
+    all_problems: list[str] = verify_quality_standard()
     for template_dir in template_dirs:
         problems = verify_template(template_dir)
         for problem in problems:

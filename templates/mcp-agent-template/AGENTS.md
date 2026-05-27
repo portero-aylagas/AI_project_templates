@@ -22,8 +22,23 @@ config -> schemas -> prompts -> llm_client -> mcp/client -> workflow -> storage 
 - Do not add live API keys, live MCP servers, network-only checks, or paid
   services to normal verification or CI.
 
+## Shared Quality Rules
+
+- Keep code beginner/intermediate-friendly with clear names, simple control
+  flow, and explicit side effects at workflow, MCP, storage, provider, and web
+  boundaries.
+- Keep public modules, classes, and functions documented with concise
+  Google-style docstrings.
+- Raise useful error messages for missing configuration, malformed input,
+  provider failures, failed tools, and invalid structured output.
+- Do not log secrets, credentials, raw sensitive user data, or full provider or
+  tool payloads.
+
 ## MCP Rules
 
+- Use the `Agents And Tools`, `Workflow Automation`, `Structured Output`,
+  `LLM/API Integration`, and `Cost And Usage` categories when extending this
+  template.
 - Treat MCP tools as untrusted external boundaries.
 - Check the tool allowlist before every tool execution.
 - Validate MCP tool results before using them in prompts or workflow logic.

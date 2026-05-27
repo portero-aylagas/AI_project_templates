@@ -24,6 +24,19 @@ tools, retrieval, or approval workflows.
 - Document reviewer evidence: setup, run command, verification command, sample
   input, expected output, limitations, and fallback behavior.
 
+Use these engineering categories when reviewing or extending a template:
+
+| Category | Template standard |
+| --- | --- |
+| General Software Architecture | Keep orchestration, business logic, UI, provider calls, storage, configuration, and utilities separated enough to inspect and test independently. |
+| Function Responsibility | Keep public functions and classes focused, clearly named, typed at boundaries, and documented with concise Google-style docstrings. |
+| Error Handling | Make missing configuration, file failures, bad user input, malformed JSON, and provider failures produce useful messages instead of silent or confusing failures. |
+| Testability | Keep workflow logic callable with fake clients, fake tools, fixture data, and local storage so normal tests do not need live services. |
+| Data And JSON Validation | Parse user input, uploaded files, API responses, model outputs, tool payloads, retrieved context, and persisted state into typed schemas before downstream use. |
+| Repository Hygiene | Keep virtual environments, caches, generated runtime outputs, secrets, and large local artifacts out of copied projects. |
+| Documentation And Reviewer Evidence | Document setup, run commands, verification, environment variables, sample inputs, expected outputs, limitations, and fallback behavior. |
+| Security And Secrets | Keep credentials out of source control, avoid sensitive logs, validate external boundaries, and treat retrieved/tool/user text as untrusted input. |
+
 ## AI Engineering Quality
 
 - Prompts have stable names, explicit inputs, clear constraints, and documented
@@ -47,6 +60,25 @@ tools, retrieval, or approval workflows.
 - Evaluation starts small: representative fixtures, expected answer properties,
   expected retrieved document IDs, and manual review notes for subjective
   quality.
+
+Use these AI-system categories when reviewing or extending a template:
+
+| Category | Template standard |
+| --- | --- |
+| AI Software Architecture | Keep provider adapters, prompts, model-call boundaries, deterministic logic, RAG, agents, tools, and workflow components in clear, fakeable modules. |
+| Prompt Quality | Keep prompt text named, inspectable, task-specific, explicit about inputs and output format, and covered by focused tests when changed. |
+| Dynamic Prompting | Insert variables through one explicit rendering path that separates user or document text from instructions. |
+| Structured Output | Validate model, tool, and workflow outputs with schemas before storing, displaying, or passing them downstream. |
+| LLM/API Integration | Centralize model names, temperature, timeouts, retries, token limits, credential loading, response parsing, and fake-client support. |
+| RAG And Retrieval | Keep loading, chunking, embedding, retrieval, ranking, context assembly, citations, empty-result behavior, and fixture evaluation separately testable. |
+| Agents And Tools | Keep tool names, descriptions, inputs, outputs, allowlists, traces, failure behavior, and final-answer extraction explicit and typed. |
+| Workflow Automation | Keep state, run IDs, idempotency, retries, failure branches, approval points, logs, recovery notes, and cost controls visible in multi-step flows. |
+| Cost And Usage | Make live evaluation, paid services, rate limits, and budget assumptions explicit before adding live-provider checks. |
+
+Speech pipelines are not required in the current templates. If a future template
+adds speech-to-text, text-to-speech, or audio processing, it should document
+audio loading, chunking, timestamps, generated audio validation, and safe output
+naming as a first-class AI-system quality category.
 
 ## Required Files
 

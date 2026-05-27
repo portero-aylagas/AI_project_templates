@@ -21,8 +21,23 @@ config -> schemas -> prompts -> llm_client -> workflow -> storage -> web -> test
 - Do not add live API keys, live vector stores, network-only checks, or paid
   services to normal verification or CI.
 
+## Shared Quality Rules
+
+- Keep code beginner/intermediate-friendly with clear names, simple control
+  flow, and explicit side effects at workflow, storage, provider, and web
+  boundaries.
+- Keep public modules, classes, and functions documented with concise
+  Google-style docstrings.
+- Raise useful error messages for missing configuration, malformed input,
+  provider failures, and invalid structured output.
+- Do not log secrets, credentials, raw sensitive user data, or full provider
+  payloads.
+
 ## RAG Rules
 
+- Use the `RAG And Retrieval`, `Prompt Quality`, `Structured Output`,
+  `LLM/API Integration`, and `Cost And Usage` categories when extending this
+  template.
 - Keep loading, chunking, embedding, retrieval, ranking, context assembly, and
   answer generation separately testable.
 - Document chunk size, overlap, top-k, filters, empty-result behavior, and

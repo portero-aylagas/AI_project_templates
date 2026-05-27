@@ -21,8 +21,23 @@ config -> schemas -> prompts -> llm_client -> workflow -> storage -> web -> test
 - Do not add live API keys, network-only checks, or paid services to normal
   verification or CI.
 
+## Shared Quality Rules
+
+- Keep code beginner/intermediate-friendly with clear names, simple control
+  flow, and explicit side effects at workflow, storage, provider, and web
+  boundaries.
+- Keep public modules, classes, and functions documented with concise
+  Google-style docstrings.
+- Raise useful error messages for missing configuration, malformed input,
+  provider failures, invalid review decisions, and invalid structured output.
+- Do not log secrets, credentials, raw sensitive user data, or full provider
+  payloads.
+
 ## Human Review Rules
 
+- Use the `Workflow Automation`, `AI Software Architecture`, `Prompt Quality`,
+  `Structured Output`, and `Cost And Usage` categories when extending this
+  template.
 - AI drafts are not final until a human review decision is persisted.
 - Preserve approve, edit, and reject as explicit state transitions.
 - Keep review state and audit records separate from display output.
