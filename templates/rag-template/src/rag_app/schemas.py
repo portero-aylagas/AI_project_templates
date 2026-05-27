@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 class Document(BaseModel):
     """Source document loaded into the corpus."""
 
+    # Use stable IDs so tests can assert exact citations.
     doc_id: str
     text: str
     metadata: dict[str, object] = Field(default_factory=dict)
@@ -16,6 +17,7 @@ class Document(BaseModel):
 class Chunk(BaseModel):
     """Searchable chunk derived from a document."""
 
+    # Chunk IDs should remain traceable back to source documents.
     chunk_id: str
     doc_id: str
     text: str
@@ -37,7 +39,7 @@ class RAGRequest(BaseModel):
 class RAGAnswer(BaseModel):
     """Grounded structured answer."""
 
+    # Answers should carry citation data separately from prose.
     answer: str
     citations: list[Citation] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
-

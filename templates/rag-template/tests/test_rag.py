@@ -8,6 +8,7 @@ from rag_app.workflow import answer_question, chunk_documents, load_documents
 
 def test_retrieval_answer_includes_citation() -> None:
     """A matching question should produce at least one citation."""
+    # This fixture proves retrieval can be tested without embeddings or a DB.
     fixture = Path("tests/fixtures/doc_quality.txt")
     chunks = chunk_documents(load_documents([fixture]))
 
@@ -21,5 +22,5 @@ def test_empty_corpus_returns_warning() -> None:
     """Empty retrieval should return a structured warning."""
     answer = answer_question(RAGRequest(question="Nothing matches"), [])
 
+    # Empty context should be explicit so callers can decide how to respond.
     assert "no_context" in answer.warnings
-

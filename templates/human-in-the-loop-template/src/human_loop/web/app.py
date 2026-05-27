@@ -29,10 +29,10 @@ def index() -> str:
 @app.post("/draft")
 def draft(task: str = Form(...), source_text: str = Form(...)) -> dict[str, object]:
     """Create a draft and return initial review state."""
+    # The UI creates review state; final approval logic belongs in workflow.py.
     ai_draft = create_draft(DraftRequest(task=task, source_text=source_text))
     return ReviewState(drafts=[ai_draft]).model_dump()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

@@ -10,6 +10,7 @@ from dataclasses import dataclass
 class Settings:
     """Runtime settings for graph model calls."""
 
+    # Fake defaults let state-transition tests run before any live model exists.
     provider: str = "fake"
     model: str = "fake-graph-model"
     temperature: float = 0.0
@@ -19,6 +20,7 @@ class Settings:
 
 def load_settings() -> Settings:
     """Load graph settings from environment variables."""
+    # Keep provider settings out of node functions so nodes stay easy to test.
     return Settings(
         provider=os.getenv("LLM_PROVIDER", "fake"),
         model=os.getenv("LLM_MODEL", "fake-graph-model"),
@@ -26,4 +28,3 @@ def load_settings() -> Settings:
         timeout_seconds=int(os.getenv("LLM_TIMEOUT_SECONDS", "30")),
         max_output_tokens=int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "1000")),
     )
-

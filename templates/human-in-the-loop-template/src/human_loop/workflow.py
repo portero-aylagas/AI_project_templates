@@ -16,6 +16,8 @@ def create_draft(
     client: DraftLLMClient | None = None,
 ) -> AIDraft:
     """Create a structured draft for human review."""
+    # Prompt loading makes the drafting instructions inspectable even while the
+    # fake client keeps tests offline.
     _ = PROMPT_PATH.read_text(encoding="utf-8")
     active_client = client or FakeDraftLLMClient()
     return active_client.create_draft(request)
@@ -26,11 +28,13 @@ def apply_decision(state: ReviewState, decision: ReviewDecision) -> ReviewState:
     updated_drafts: list[AIDraft] = []
     matched = False
     for draft in state.drafts:
+        # Copy unmatched drafts through unchanged; only the target draft changes.
         if draft.draft_id != decision.draft_id:
             updated_drafts.append(draft)
             continue
 
         matched = True
+        # Keep state transitions explicit so approve/edit/reject are reviewable.
         if decision.action == "approve":
             updated_drafts.append(draft.model_copy(update={"status": "approved"}))
         elif decision.action == "edit":
@@ -42,8 +46,10 @@ def apply_decision(state: ReviewState, decision: ReviewDecision) -> ReviewState:
             updated_drafts.append(draft.model_copy(update={"status": "rejected"}))
 
     if not matched:
+        # Unknown IDs are a workflow error, not a silent no-op.
         raise ValueError(f"Unknown draft_id: {decision.draft_id}")
 
+    # Every human decision appends audit data alongside the updated state.
     audit_entry = AuditEntry(
         draft_id=decision.draft_id,
         action=decision.action,
@@ -53,4 +59,3 @@ def apply_decision(state: ReviewState, decision: ReviewDecision) -> ReviewState:
         drafts=updated_drafts,
         audit_log=[*state.audit_log, audit_entry],
     )
-

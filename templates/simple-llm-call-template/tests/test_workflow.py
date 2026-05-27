@@ -10,6 +10,7 @@ def test_prompt_rendering_includes_explicit_inputs() -> None:
 
     prompt = render_prompt(request)
 
+    # This test teaches where prompt customization should show up.
     assert "Summarize" in prompt
     assert "Fixture text" in prompt
 
@@ -20,6 +21,6 @@ def test_workflow_returns_structured_output_with_fake_client() -> None:
 
     response = run_generation(request)
 
+    # The default fake client keeps normal verification offline and deterministic.
     assert response.result.title
     assert response.model
-

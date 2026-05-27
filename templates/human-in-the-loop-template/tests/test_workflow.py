@@ -10,6 +10,7 @@ def test_create_draft_returns_pending_structured_draft() -> None:
         DraftRequest(task="Draft a response", source_text="Need a status update.")
     )
 
+    # AI output starts pending so a human can approve, edit, or reject it.
     assert draft.status == "pending"
     assert draft.content
 
@@ -26,6 +27,6 @@ def test_apply_approve_decision_updates_state_and_audit_log() -> None:
         ReviewDecision(draft_id=draft.draft_id, action="approve"),
     )
 
+    # The important behavior is both state transition and audit trail.
     assert updated.drafts[0].status == "approved"
     assert updated.audit_log[0].action == "approve"
-

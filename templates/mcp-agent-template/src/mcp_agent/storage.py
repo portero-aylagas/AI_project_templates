@@ -10,11 +10,12 @@ from mcp_agent.schemas import MCPAnswer
 
 def save_answer(answer: MCPAnswer, path: Path) -> None:
     """Persist an MCP answer as JSON."""
+    # Persist blocked reasons and tool results together for auditability.
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(answer.model_dump_json(indent=2), encoding="utf-8")
 
 
 def load_answer(path: Path) -> MCPAnswer:
     """Load and validate a persisted MCP answer."""
+    # Validate stored JSON before treating a tool result as trusted.
     return MCPAnswer.model_validate(json.loads(path.read_text(encoding="utf-8")))
-

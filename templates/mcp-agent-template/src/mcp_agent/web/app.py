@@ -29,6 +29,7 @@ def index() -> str:
 @app.post("/run")
 def run(question: str = Form(...), requested_tool: str = Form("search_docs")) -> dict[str, object]:
     """Run the MCP workflow from form input."""
+    # The UI passes through explicit tool intent; workflow.py decides allow/deny.
     return run_mcp_workflow(
         MCPRequest(question=question, requested_tool=requested_tool)
     ).model_dump()
@@ -36,4 +37,3 @@ def run(question: str = Form(...), requested_tool: str = Form("search_docs")) ->
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

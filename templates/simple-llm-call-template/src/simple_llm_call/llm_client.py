@@ -7,6 +7,8 @@ from typing import Protocol
 from simple_llm_call.schemas import GenerationResult
 
 
+# Workflow code depends on this protocol, not on a specific provider SDK. A
+# real OpenAI/Anthropic/local client can be added later without changing tests.
 class LLMClient(Protocol):
     """Protocol implemented by live and fake LLM clients."""
 
@@ -19,10 +21,11 @@ class FakeLLMClient:
 
     def generate_structured(self, prompt: str) -> GenerationResult:
         """Return a stable result for tests and local smoke runs."""
+        # Keep fake output shaped like the real schema so workflow tests remain
+        # useful after a live provider is introduced.
         first_line = prompt.strip().splitlines()[0] if prompt.strip() else "Result"
         return GenerationResult(
             title="Fake structured response",
             body=f"Processed prompt starting with: {first_line}",
             warnings=[],
         )
-

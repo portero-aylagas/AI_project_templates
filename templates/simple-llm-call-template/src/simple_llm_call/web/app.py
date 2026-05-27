@@ -29,10 +29,10 @@ def index() -> str:
 @app.post("/generate")
 def generate(task: str = Form(...), input_text: str = Form(...)) -> dict[str, object]:
     """Run the workflow from form input."""
+    # The UI stays thin: parse request data, call the workflow, return a schema.
     response = run_generation(GenerationRequest(task=task, input_text=input_text))
     return response.model_dump()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

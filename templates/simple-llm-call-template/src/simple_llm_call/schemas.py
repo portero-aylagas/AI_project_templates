@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 class GenerationRequest(BaseModel):
     """User request for a direct model call."""
 
+    # Validate user input before it is inserted into a prompt.
     task: str = Field(..., min_length=1)
     input_text: str = Field(..., min_length=1)
 
@@ -15,6 +16,7 @@ class GenerationRequest(BaseModel):
 class GenerationResult(BaseModel):
     """Validated model output trusted by downstream code."""
 
+    # Downstream code should depend on these fields, not raw model text.
     title: str
     body: str
     warnings: list[str] = Field(default_factory=list)
@@ -26,4 +28,3 @@ class WorkflowResponse(BaseModel):
     request: GenerationRequest
     result: GenerationResult
     model: str
-

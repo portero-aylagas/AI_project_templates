@@ -29,6 +29,9 @@ The goal is consistency. A project built from any template should be easy to
 inspect, test without live keys, extend safely, and review for both software
 engineering quality and AI-system quality.
 
+For the full copy-and-start workflow, see
+[`docs/how-to-use-a-template.md`](docs/how-to-use-a-template.md).
+
 ## Quality Defaults
 
 - Prompts live in named files under `src/<package>/prompts/`.

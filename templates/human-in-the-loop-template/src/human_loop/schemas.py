@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 class DraftRequest(BaseModel):
     """Request used to generate an AI draft."""
 
+    # Validate source input before it is used for draft generation.
     task: str = Field(..., min_length=1)
     source_text: str = Field(..., min_length=1)
 
@@ -19,6 +20,7 @@ class DraftRequest(BaseModel):
 class AIDraft(BaseModel):
     """Structured AI draft awaiting human review."""
 
+    # Drafts are not final output. Status records the review lifecycle.
     draft_id: str = Field(default_factory=lambda: str(uuid4()))
     task: str
     content: str
@@ -29,6 +31,7 @@ class AIDraft(BaseModel):
 class ReviewDecision(BaseModel):
     """Human decision applied to an AI draft."""
 
+    # Keep review intent explicit so decisions can be audited later.
     draft_id: str
     action: Literal["approve", "edit", "reject"]
     edited_content: str | None = None
@@ -47,6 +50,6 @@ class AuditEntry(BaseModel):
 class ReviewState(BaseModel):
     """Persisted review state."""
 
+    # Store drafts and audit records separately from display output.
     drafts: list[AIDraft] = Field(default_factory=list)
     audit_log: list[AuditEntry] = Field(default_factory=list)
-

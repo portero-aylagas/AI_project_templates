@@ -28,9 +28,9 @@ def index() -> str:
 @app.post("/run")
 def run(objective: str = Form(...)) -> dict[str, object]:
     """Run the agent from form input."""
+    # Keep request parsing here and agent behavior in agent.py.
     return run_agent(AgentRequest(objective=objective)).model_dump()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

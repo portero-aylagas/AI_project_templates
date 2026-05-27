@@ -11,6 +11,7 @@ from rag_app.workflow import answer_question
 
 
 app = FastAPI(title="RAG Template")
+# Demo chunks keep the UI runnable before a real ingestion pipeline exists.
 DEMO_CHUNKS = [Chunk(chunk_id="demo-0", doc_id="demo", text="Templates use Pydantic.")]
 
 
@@ -29,9 +30,9 @@ def index() -> str:
 @app.post("/ask")
 def ask(question: str = Form(...)) -> dict[str, object]:
     """Answer a question from demo chunks."""
+    # Keep the UI thin; real corpus loading belongs in workflow/storage code.
     return answer_question(RAGRequest(question=question), DEMO_CHUNKS).model_dump()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

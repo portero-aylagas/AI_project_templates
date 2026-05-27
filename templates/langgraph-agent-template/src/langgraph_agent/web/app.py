@@ -28,9 +28,9 @@ def index() -> str:
 @app.post("/run")
 def run(user_goal: str = Form(...)) -> dict[str, object]:
     """Run the graph from form input."""
+    # The UI stays thin; graph state and transitions belong in graph.py.
     return run_graph(GraphRequest(user_goal=user_goal)).model_dump()
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
-

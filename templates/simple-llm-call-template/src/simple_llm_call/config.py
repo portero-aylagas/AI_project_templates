@@ -10,6 +10,8 @@ from dataclasses import dataclass
 class Settings:
     """Runtime settings for model calls and verification-safe defaults."""
 
+    # The fake defaults let a copied project run tests before any provider key
+    # exists. Replace these values when you add a real client in llm_client.py.
     provider: str = "fake"
     model: str = "fake-structured-model"
     temperature: float = 0.0
@@ -19,6 +21,7 @@ class Settings:
 
 def load_settings() -> Settings:
     """Load settings from environment variables."""
+    # Keep environment parsing in one place so workflow code stays easy to test.
     return Settings(
         provider=os.getenv("LLM_PROVIDER", "fake"),
         model=os.getenv("LLM_MODEL", "fake-structured-model"),
@@ -26,4 +29,3 @@ def load_settings() -> Settings:
         timeout_seconds=int(os.getenv("LLM_TIMEOUT_SECONDS", "30")),
         max_output_tokens=int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "800")),
     )
-

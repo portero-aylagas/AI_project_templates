@@ -21,19 +21,21 @@ def run_mcp_workflow(
 ) -> MCPAnswer:
     """Run a safe MCP workflow with tool allowlisting."""
     active_settings = settings or load_settings()
+    # Defaults are fake so normal verification does not call a live MCP server.
     active_mcp = mcp_client or FakeMCPClient()
     active_llm = llm_client or FakeMCPLLMClient()
     _ = PROMPT_PATH.read_text(encoding="utf-8")
 
+    # Check the allowlist before any external tool boundary is crossed.
     if request.requested_tool not in active_settings.allowed_tools:
         return MCPAnswer(
             answer="Tool execution blocked.",
             blocked_reason=f"Tool not allowlisted: {request.requested_tool}",
         )
 
+    # Tool results are typed at the MCP boundary before answer generation.
     result = active_mcp.call_tool(
         request.requested_tool,
         {"question": request.question},
     )
     return active_llm.answer(request, result)
-

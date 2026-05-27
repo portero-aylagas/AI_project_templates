@@ -15,3 +15,10 @@ clients.
 make verify
 ```
 
+## Development Loop
+
+1. Define or narrow the tool contract.
+2. Add a fake tool result for tests.
+3. Update the agent prompt and orchestration.
+4. Assert the tool trace and structured final answer.
+5. Run `make verify`.

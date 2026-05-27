@@ -9,6 +9,7 @@ def test_allowed_tool_returns_structured_answer() -> None:
     """Allowlisted MCP tools should be executed through the boundary."""
     answer = run_mcp_workflow(MCPRequest(question="What is allowed?"))
 
+    # The fake MCP client proves the boundary without a live server.
     assert answer.tool_result is not None
     assert answer.tool_result.ok
 
@@ -21,5 +22,5 @@ def test_blocked_tool_does_not_execute() -> None:
         settings=settings,
     )
 
+    # A blocked tool should be explicit and should not return tool_result data.
     assert answer.blocked_reason == "Tool not allowlisted: shell"
-

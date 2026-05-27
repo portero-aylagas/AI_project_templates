@@ -14,6 +14,7 @@ PROMPT_PATH = Path(__file__).parent / "prompts" / "answer.md"
 
 def load_documents(paths: list[Path]) -> list[Document]:
     """Load documents deterministically from sorted paths."""
+    # Sorting keeps fixture order stable across operating systems and CI runs.
     documents: list[Document] = []
     for path in sorted(paths):
         documents.append(Document(doc_id=path.stem, text=path.read_text(encoding="utf-8")))
@@ -26,6 +27,8 @@ def chunk_documents(documents: list[Document], settings: Settings | None = None)
     chunks: list[Chunk] = []
     for document in documents:
         text = document.text
+        # The starter chunker is intentionally simple. Replace it behind this
+        # function when the copied project needs token-aware chunking.
         step = max(1, active_settings.chunk_size - active_settings.chunk_overlap)
         for index, start in enumerate(range(0, len(text), step)):
             chunk_text = text[start : start + active_settings.chunk_size]
@@ -42,6 +45,8 @@ def chunk_documents(documents: list[Document], settings: Settings | None = None)
 
 def retrieve(question: str, chunks: list[Chunk], top_k: int) -> list[Chunk]:
     """Return deterministic keyword matches with clear empty-result behavior."""
+    # Keyword matching is easy to test. Swap it for embeddings only after
+    # expected document IDs are covered by fixtures.
     terms = {term.lower() for term in question.split() if len(term) > 2}
     matches = [
         chunk
@@ -59,8 +64,8 @@ def answer_question(
 ) -> RAGAnswer:
     """Answer a question from already-prepared chunks."""
     active_settings = settings or load_settings()
+    # The fake client keeps normal verification offline and citation-aware.
     active_client = client or FakeRAGLLMClient()
     _ = PROMPT_PATH.read_text(encoding="utf-8")
     retrieved = retrieve(request.question, chunks, active_settings.top_k)
     return active_client.answer(request.question, retrieved)
-
