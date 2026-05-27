@@ -14,8 +14,12 @@ config -> schemas -> prompts -> llm_client -> workflow -> storage -> web -> test
   API responses with Pydantic schemas.
 - Use fake clients and deterministic fixtures in normal tests.
 - Run `make verify` before reporting completion.
-- Do not require live API keys, network access, or paid services for normal
-  verification.
+- Keep the starter GitHub Actions workflow lightweight and passing; it should
+  install development dependencies and run `make verify`.
+- Preserve Ruff linting and Google-style pydocstyle settings in
+  `pyproject.toml`.
+- Do not add live API keys, network-only checks, or paid services to normal
+  verification or CI.
 
 ## Human Review Rules
 
@@ -26,4 +30,3 @@ config -> schemas -> prompts -> llm_client -> workflow -> storage -> web -> test
 - Do not bypass review gates for actions that affect users, files, messages, or
   external systems.
 - Keep reviewer notes and edited content typed and traceable.
-

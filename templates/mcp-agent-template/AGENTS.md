@@ -15,8 +15,12 @@ config -> schemas -> prompts -> llm_client -> mcp/client -> workflow -> storage 
 - Use fake clients, fake MCP responses, and deterministic fixtures in normal
   tests.
 - Run `make verify` before reporting completion.
-- Do not require live API keys, live MCP servers, network access, or paid
-  services for normal verification.
+- Keep the starter GitHub Actions workflow lightweight and passing; it should
+  install development dependencies and run `make verify`.
+- Preserve Ruff linting and Google-style pydocstyle settings in
+  `pyproject.toml`.
+- Do not add live API keys, live MCP servers, network-only checks, or paid
+  services to normal verification or CI.
 
 ## MCP Rules
 
@@ -28,4 +32,3 @@ config -> schemas -> prompts -> llm_client -> mcp/client -> workflow -> storage 
   tests.
 - Log tool names and run identifiers where useful, but never log secrets or
   sensitive payloads.
-

@@ -60,6 +60,7 @@ AGENTS.md
 Makefile
 verify.sh
 pyproject.toml
+.github/workflows/verify.yml
 src/<package>/config.py
 src/<package>/schemas.py
 src/<package>/llm_client.py
@@ -80,5 +81,7 @@ docs/evaluation.md
   static acceptance basics: non-empty docs, prompt files, fakeable LLM
   boundaries, fixture-backed tests, `pyproject.toml` dev tooling, and local
   verification commands.
+- Copied-project CI stays intentionally small: the required GitHub Actions
+  workflow sets up Python, installs `.[dev]`, and runs `make verify`.
 - `make verify-full` is the heavier release/review gate. It runs the fast gate
   first, then runs each template's own `make verify` command.

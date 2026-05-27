@@ -52,6 +52,10 @@ Run the local verification command before changing behavior:
 make verify
 ```
 
+Each copied project includes `.github/workflows/verify.yml`, a small GitHub
+Actions workflow that installs development dependencies and runs `make verify`
+on push, pull request, and manual dispatch.
+
 The templates use fake clients by default, so normal verification should not
 need live API keys, network access, or paid services.
 
@@ -85,7 +89,7 @@ When adding a real provider:
 - keep the fake client for tests
 - implement the same protocol/interface in `llm_client.py`
 - add or update schemas before trusting provider output
-- keep live-provider tests separate from normal `make verify`
+- keep live-provider tests separate from normal `make verify` and starter CI
 - document any required credentials in `.env.example` and `docs/runbook.md`
 
 The copied template should stay small. Add production infrastructure only when

@@ -12,6 +12,13 @@ python -m pip install -e ".[dev]"
 make verify
 ```
 
+## CI
+
+Copied projects include `.github/workflows/verify.yml`, which installs
+development dependencies and runs `make verify` on push, pull request, and
+manual dispatch. Keep live-provider, paid-service, and network-only checks out
+of normal CI.
+
 ## Development Notes
 
 Characterize graph paths before changing state schemas, routing, node behavior,

@@ -19,6 +19,14 @@ REQUIRED_ROOT_FILES = [
     "pyproject.toml",
 ]
 
+REQUIRED_CI_FILE = ".github/workflows/verify.yml"
+
+REQUIRED_CI_SNIPPETS = [
+    "setup-python",
+    'pip install -e ".[dev]"',
+    "make verify",
+]
+
 REQUIRED_DOCS = [
     "docs/architecture.md",
     "docs/runbook.md",
@@ -132,6 +140,23 @@ def verify_template_verification(template_dir: Path) -> list[str]:
     return problems
 
 
+def verify_ci_workflow(template_dir: Path) -> list[str]:
+    """Return problems for missing copied-project CI workflow basics."""
+    problems: list[str] = []
+    workflow = template_dir / REQUIRED_CI_FILE
+    if not workflow.is_file():
+        return problems
+
+    text = read_text(workflow)
+    for snippet in REQUIRED_CI_SNIPPETS:
+        if snippet not in text:
+            problems.append(f"{REQUIRED_CI_FILE} missing {snippet}")
+    if "branches:" in text:
+        problems.append(f"{REQUIRED_CI_FILE} should not filter branches")
+
+    return problems
+
+
 def verify_pyproject(template_dir: Path) -> list[str]:
     """Return problems for pyproject development-tool configuration."""
     problems: list[str] = []
@@ -235,7 +260,7 @@ def verify_template(template_dir: Path) -> list[str]:
     """Return structural and static acceptance problems for one template."""
     problems: list[str] = []
 
-    for relative_path in REQUIRED_ROOT_FILES + REQUIRED_DOCS:
+    for relative_path in REQUIRED_ROOT_FILES + REQUIRED_DOCS + [REQUIRED_CI_FILE]:
         if not (template_dir / relative_path).is_file():
             problems.append(f"missing file: {relative_path}")
 
@@ -243,10 +268,11 @@ def verify_template(template_dir: Path) -> list[str]:
         if not (template_dir / relative_path).is_dir():
             problems.append(f"missing directory: {relative_path}")
 
-    required_text_files = REQUIRED_ROOT_FILES + REQUIRED_DOCS
+    required_text_files = REQUIRED_ROOT_FILES + REQUIRED_DOCS + [REQUIRED_CI_FILE]
     problems.extend(verify_non_empty_files(template_dir, required_text_files))
     problems.extend(verify_docs(template_dir))
     problems.extend(verify_template_verification(template_dir))
+    problems.extend(verify_ci_workflow(template_dir))
     problems.extend(verify_pyproject(template_dir))
     problems.extend(verify_tests(template_dir))
 

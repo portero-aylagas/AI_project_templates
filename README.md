@@ -39,6 +39,8 @@ For the full copy-and-start workflow, see
 - External model calls live behind `llm_client.py` or an equivalent adapter.
 - Normal tests use fake clients, fake tools, and deterministic fixtures.
 - `make verify` is the standard local verification command.
+- Copied projects include a small GitHub Actions workflow that installs
+  development dependencies and runs `make verify`.
 - Each boilerplate includes project-local `AGENTS.md` guidance for future agent
   maintenance after the project is copied.
 - FastAPI plus simple HTML is the default UI layer.
@@ -56,7 +58,8 @@ make verify
 Root verification is the fast gate. It checks that every template contains the
 required quality artifacts plus static acceptance basics such as prompt files,
 fakeable model boundaries, development-tool configuration, and per-template
-verification commands.
+verification commands. It also checks that each copied template includes the
+starter `.github/workflows/verify.yml` workflow.
 
 Run the heavier template verification path when dependencies are installed:
 
