@@ -50,6 +50,16 @@ Run this from the repository root:
 make verify
 ```
 
-Root verification checks that every template contains the required quality
-artifacts. Each template also has its own `make verify` command for local
-development after installing that template's dependencies.
+Root verification is the fast gate. It checks that every template contains the
+required quality artifacts plus static acceptance basics such as prompt files,
+fakeable model boundaries, development-tool configuration, and per-template
+verification commands.
+
+Run the heavier template verification path when dependencies are installed:
+
+```bash
+make verify-full
+```
+
+`make verify-full` first runs the root gate, then runs each template's own
+`make verify` command.

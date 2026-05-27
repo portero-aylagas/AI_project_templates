@@ -73,3 +73,12 @@ docs/runbook.md
 docs/limitations.md
 docs/evaluation.md
 ```
+
+## Verification Gates
+
+- `make verify` is the fast repository gate. It checks required structure plus
+  static acceptance basics: non-empty docs, prompt files, fakeable LLM
+  boundaries, fixture-backed tests, `pyproject.toml` dev tooling, and local
+  verification commands.
+- `make verify-full` is the heavier release/review gate. It runs the fast gate
+  first, then runs each template's own `make verify` command.
