@@ -45,3 +45,7 @@ config -> schemas -> prompts -> llm_client -> workflow -> storage -> web -> test
 - Do not bypass review gates for actions that affect users, files, messages, or
   external systems.
 - Keep reviewer notes and edited content typed and traceable.
+
+---
+
+For quick technical review: this repository is best evaluated as reusable Applied AI Integration / AI Workflow Engineering patterns. It codifies the same approach described in my profile README into project templates that other projects or teams can reuse for controlled AI-assisted software delivery.
